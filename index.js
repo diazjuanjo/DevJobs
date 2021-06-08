@@ -13,10 +13,14 @@ require('dotenv').config({path : 'variables.env'});
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // habilitar handlebars como view
 app.engine('handlebars',
     exphbs({
-        defaultLayout: 'layout'
+        defaultLayout: 'layout',
+        helpers: require('./helpers/handlebars')
     })
 );
 app.set('view engine', 'handlebars');

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index"
+    "dev": "nodemon ./index",
+    "start": "concurrently \"npm run dev\" \"npm run watch\"",
+    "watch": "webpack -w --mode development"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,7 @@
   },
   "homepage": "https://github.com/diazjuanjo/DevJobs#readme",
   "dependencies": {
+    "concurrently": "^6.2.0",
     "connect-mongo": "^4.4.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
@@ -28,6 +31,11 @@
     "slug": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "babel-loader": "^8.2.2",
+    "nodemon": "^2.0.7",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2"
   }
 }
