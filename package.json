@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/diazjuanjo/DevJobs#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "concurrently": "^6.2.0",
     "connect-mongo": "^4.4.1",
     "cookie-parser": "^1.4.5",
