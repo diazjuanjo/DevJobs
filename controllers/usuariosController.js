@@ -1,27 +1,26 @@
 const mongoose = require('mongoose');
 const Usuarios = mongoose.model('Usuarios');
-const { body, validationResult } = require('express-validator');
+const { validationResult } = require('express-validator');
 
 exports.formCrearCuenta = (req, res) => {
     res.render('crear-cuenta', {
         nombrePagina: 'Crea tu cuenta en devJobs',
-        tagLine: 'Comienza a publicar tus vacantes gratis, solo tienes que crear una cuenta'
+        tagline: 'Comienza a publicar tus vacantes gratis, solo tienes que crear una cuenta'
     })
 }
 
 exports.validarRegistro = (req, res, next) => {
 
-    const errores = validationResult(req);
+    let errores = validationResult(req);
 
-    // console.log(req.body);
-    // console.log(errores.array());
+    errores = errores.errors;
 
-    if(errores){
+    if(errores.length > 0){
         // si hay errores
-        req.flash('error', errores.array().map(error => error.msg))
+        req.flash('error', errores.map(error => error.msg));
         res.render('crear-cuenta', {
             nombrePagina: 'Crea tu cuenta en devJobs',
-            tagLine: 'Comienza a publicar tus vacantes gratis, solo tienes que crear una cuenta',
+            tagline: 'Comienza a publicar tus vacantes gratis, solo tienes que crear una cuenta',
             mensajes: req.flash()
         });
         return;
@@ -42,4 +41,10 @@ exports.crearUsuario = async (req, res, next) => {
         req.flash('error', error);
         res.redirect('/crear-cuenta');
     }
+}
+
+exports.formIniciarSesion = (req, res) => {
+    res.render('iniciar-sesion', {
+        nombrePagina: 'Iniciar Sesión devJobs'
+    })
 }

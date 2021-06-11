@@ -9,7 +9,7 @@ module.exports = {
         });
         return opciones.fn().html = html;
     },
-    tipoContrato : (seleccionado, opciones) => {
+    tipoContrato: (seleccionado, opciones) => {
         return opciones.fn(this).replace(
             new RegExp(` value="${seleccionado}"`), '$& selected="selected"'
         )
@@ -18,7 +18,7 @@ module.exports = {
         const categoria = Object.keys(errores);
 
         let html = '';
-        if(categoria.length){
+        if(categoria.length) {
             errores[categoria].forEach(error => {
                 html += `<div class="${categoria} alerta">
                     ${error}

@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const usuariosSchema = new mongoose.Schema({
     email: {
         type: String,
-        unique: true,
+        // unique: true,
         lowercase: true,
         trim: true
     },
