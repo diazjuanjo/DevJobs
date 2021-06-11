@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const homeController = require('../controllers/homeController');
 const vacantesController = require('../controllers/vacantesController');
-const usuariosController = require('../controllers/usuariosController')
+const usuariosController = require('../controllers/usuariosController');
+const { check } = require('express-validator');
 
-module.exports = () => {
+module.exports = (req, res) => {
     router.get('/', homeController.mostrarTrabajos);
 
     // Crear Vacantes
@@ -20,7 +21,17 @@ module.exports = () => {
 
     // Crear Cuentas
     router.get('/crear-cuenta', usuariosController.formCrearCuenta);
-    router.post('/crear-cuenta', usuariosController.crearUsuario);
+    router.post('/crear-cuenta',
+        [
+            check('nombre', 'El Nombre es Obligatorio').not().isEmpty(),
+            check('email', 'El email debe ser válido').isEmail(),
+            check('password', 'El password no puede ir vacío').not().isEmpty(),
+            check('confirmar', 'Confirmar password no puede ir vacío').not().isEmpty(),
+            check('confirmar', 'El password es diferente').custom((value, {req}) => (value === req.body.password))
+        ],
+        usuariosController.validarRegistro,
+        usuariosController.crearUsuario
+    );
 
     return router;
 }
