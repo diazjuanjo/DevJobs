@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 const Vacante = mongoose.model('Vacante');
+const { validationResult } = require('express-validator');
 
 exports.formularioNuevaVacante = (req, res) => {
     res.render('nueva-vacante', {
         nombrePagina: 'Nueva Vacante',
-        tagline: 'Llena el formulario y publica tu vacante'
+        tagline: 'Llena el formulario y publica tu vacante',
+        cerrarSesion: true,
+        nombre: req.user.nombre
     })
 }
 
@@ -47,7 +50,9 @@ exports.formEditarVacante = async (req, res, next) => {
 
     res.render('editar-vacante', {
         vacante,
-        nombrePagina: `Editar - ${vacante.titulo}`
+        nombrePagina: `Editar - ${vacante.titulo}`,
+        cerrarSesion: true,
+        nombre: req.user.nombre
     })
 }
 
@@ -62,4 +67,33 @@ exports.editarVacante = async (req, res, next) => {
     });
     res.redirect(`/vacantes/${vacante.url}`);
 
+}
+
+// Validar vacantes
+exports.validarVacante = (req, res, next) => {
+    let errores = validationResult(req);
+
+    errores = errores.errors;
+
+    if(errores.length > 0){
+        // si hay errores
+        req.flash('error', errores.map(error => error.msg));
+        res.render('nueva-vacante', {
+            nombrePagina: 'Nueva Vacante',
+            tagline: 'Llena el formulario y publica tu vacante',
+            mensajes: req.flash(),
+            cerrarSesion: true,
+            nombre: req.user.nombre
+        });
+        return;
+    }
+
+    // si toda la validacion es correcta
+    next();
+}
+
+exports.eliminarVacante = async (req, res) => {
+    const { id } = req.params;
+
+    console.log(id);
 }

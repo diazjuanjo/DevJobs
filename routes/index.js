@@ -17,6 +17,14 @@ module.exports = (req, res) => {
     );
     router.post('/vacantes/nueva',
         authController.verificarUsuario,
+        [
+            check('titulo', 'Agrega un Titulo a la Vacante').not().isEmpty(),
+            check('empresa', 'Agrega una Empresa').not().isEmpty(),
+            check('ubicacion', 'Agrega una Ubicacion').not().isEmpty(),
+            check('contrato', 'Selecciona el Tipo de Contrato').not().isEmpty(),
+            check('skills', 'Agrega al menos una habilidad').not().isEmpty()
+        ],
+        vacantesController.validarVacante,
         vacantesController.agregarVacante
     );
 
@@ -32,6 +40,9 @@ module.exports = (req, res) => {
         authController.verificarUsuario,
         vacantesController.editarVacante
     );
+
+    // Eliminar Vacantes
+    router.delete('/vacantes/eliminar/:id', vacantesController.eliminarVacante);
 
     // Crear Cuentas
     router.get('/crear-cuenta', usuariosController.formCrearCuenta);
@@ -50,6 +61,11 @@ module.exports = (req, res) => {
     // Autenticar Usuarios
     router.get('/iniciar-sesion', usuariosController.formIniciarSesion);
     router.post('/iniciar-sesion', authController.autenticarUsuario);
+    // cerrar sesion
+    router.get('/cerrar-sesion',
+        authController.verificarUsuario,
+        authController.cerrarSesion
+    );
 
     // Panel de Administracion
     router.get('/administracion',
@@ -62,6 +78,16 @@ module.exports = (req, res) => {
         authController.verificarUsuario,
         usuariosController.formEditarPerfil
     );
+    router.post('/editar-perfil',
+        authController.verificarUsuario,
+        [
+            check('nombre', 'El Nombre es Obligatorio').not().isEmpty(),
+            check('email', 'El email debe ser válido').isEmail()
+        ],
+        usuariosController.validarPerfil,
+        usuariosController.editarPerfil
+    );
+    
 
     return router;
 }
